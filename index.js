@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 
 // Load env vars
 dotenv.config();
@@ -9,9 +9,9 @@ dotenv.config();
 connectDB();
 
 // Import Routes
-const userRoutes = require('./routes/userRoutes');
-const bookRoutes = require('./routes/bookRoutes');
-const transactionRoutes = require('./routes/tranctionRoutes');
+const userRoutes = require('./src/routes/userRoutes');
+const bookRoutes = require('./src/routes/bookRoutes');
+const transactionRoutes = require('./src/routes/tranctionRoutes');
 
 const app = express();
 app.use(express.json()); // Parse incoming JSON requests
