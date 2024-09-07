@@ -2,10 +2,9 @@
   "name": "edunova-task",
   "version": "1.0.0",
   "description": "Library Back-end",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install:prod": "npm install --omit=dev",
     "build": "npm run install:prod && npm run build",
     "start": "node index.js"
   },
