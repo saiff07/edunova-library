@@ -20,7 +20,7 @@ app.use(express.json()); // Parse incoming JSON requests
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/', (req,res) => {
+app.get('/', (req,res) => {
     res.send("Welcome to home page")
 });
 // Error Handling Middleware
