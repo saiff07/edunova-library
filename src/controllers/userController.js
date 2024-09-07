@@ -55,3 +55,12 @@ exports.getUserProfile = async (req, res) => {
         res.status(500).json({ error: 'Fetching user profile failed' });
     }
 };
+
+exports.listAllUsers = async (req, res) => {
+    try {
+        const user = await User.find().select('-password');
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Fetching user profile failed' });
+    }
+};
