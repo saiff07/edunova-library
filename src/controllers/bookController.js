@@ -1,27 +1,28 @@
+const { validationResult } = require('express-validator');
+const { bookValidators } = require('../validators/validators');
 const Book = require('../models/book');
 
+// Add a new book
+exports.addBook = [
+    bookValidators.addBook,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
+        try {
+            const { name, category, rentPerDay } = req.body;
+            const newBook = new Book({ name, category, rentPerDay });
+            await newBook.save();
 
-// Create a new book
-exports.addBook = async (req, res) => {
-    try {
-        const { name, category, rentPerDay } = req.body;
-
-        // Create a new Book instance
-        const newBook = new Book({
-            name,
-            category,
-            rentPerDay,
-        });
-
-        // Save the new book to the database
-        await newBook.save();
-
-        res.status(201).json(newBook);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to add book' });
+            res.status(201).json(newBook);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to add book' });
+        }
     }
-};
+];
+
 
 
 // Search books by term
@@ -46,7 +47,6 @@ exports.getBooksByRent = async (req, res) => {
     }
 };
 
-// Get books by filter
 // Get books by filter
 exports.filterBooks = async (req, res) => {
     try {
@@ -77,6 +77,7 @@ exports.filterBooks = async (req, res) => {
     }
 };
 
+//list all books
 exports.listAllBooks = async (req, res) =>  {
     try {
         const book = await Book.find();

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { issueBook, returnBook, getTransactionHistory, getBooksIssuedInDateRange } = require('../controllers/transactionController');
+const { issueBook, returnBook, getTransactionHistory, getBooksIssuedInDateRange, getAllTransactionHistory } = require('../controllers/transactionController');
 const { protect } = require('../middlewares/authMidlleware');
 
 // Issue a book
@@ -10,7 +10,9 @@ router.post('/issue', protect, issueBook);
 router.post('/return', protect, returnBook);
 
 // Get transaction history by book name
-router.get('/history', protect, getTransactionHistory);
+router.get('/history-book', protect, getTransactionHistory);
+
+router.get('/history', getAllTransactionHistory);
 
 // Get books issued in a date range
 router.get('/daterange', protect, getBooksIssuedInDateRange);

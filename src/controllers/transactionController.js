@@ -29,7 +29,7 @@ exports.issueBook = async (req, res) => {
 
 // Return a book
 exports.returnBook = async (req, res) => {
-    const { transactionId, returnDate } = req.body;
+    const { transactionId } = req.body; // No need to pass returnDate from the body
 
     try {
         const transaction = await Transaction.findById(transactionId).populate('book');
@@ -39,7 +39,8 @@ exports.returnBook = async (req, res) => {
         }
 
         // Calculate rent based on issue and return date
-        const daysRented = Math.ceil((new Date(returnDate) - transaction.issueDate) / (1000 * 60 * 60 * 24));
+        const returnDate = Date.now(); // Automatically set the return date to the current date
+        const daysRented = Math.ceil((returnDate - transaction.issueDate) / (1000 * 60 * 60 * 24));
         const rentPaid = daysRented * transaction.book.rentPerDay;
 
         transaction.returnDate = returnDate;
@@ -53,6 +54,7 @@ exports.returnBook = async (req, res) => {
         res.status(500).json({ message: 'Failed to return the book', error });
     }
 };
+
 
 // Get transaction history by book name
 exports.getTransactionHistory = async (req, res) => {
@@ -73,6 +75,21 @@ exports.getTransactionHistory = async (req, res) => {
         res.status(500).json({ message: 'Failed to get transaction history', error });
     }
 };
+
+// Get all transaction history
+exports.getAllTransactionHistory = async (req, res) => {
+    try {
+        // Fetch all transactions and populate the related book and user
+        const transactions = await Transaction.find()
+            .populate('book')
+            .populate('user');
+
+        res.status(200).json(transactions);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch transaction history', error });
+    }
+};
+
 
 // Get books issued within a date range
 exports.getBooksIssuedInDateRange = async (req, res) => {

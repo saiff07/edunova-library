@@ -1,20 +1,26 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
 
-// Load env vars
+
 dotenv.config();
-
-// Connect to database
 connectDB();
 
-// Import Routes
+
 const userRoutes = require('./src/routes/userRoutes');
 const bookRoutes = require('./src/routes/bookRoutes');
 const transactionRoutes = require('./src/routes/tranctionRoutes');
 
 const app = express();
-app.use(express.json()); // Parse incoming JSON requests
+app.use(express.json());
+app.use(morgan('dev'));
+app.use(cors());
+app.use(helmet());
+
+
 
 // API Routes
 app.use('/api/users', userRoutes);
@@ -23,7 +29,7 @@ app.use('/api/transactions', transactionRoutes);
 app.get('/', (req,res) => {
     res.send("Welcome to home page")
 });
-// Error Handling Middleware
+
 app.use((err, req, res, next) => {
     const statusCode = res.statusCode || 500;
     res.status(statusCode).json({
